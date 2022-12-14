@@ -21,4 +21,5 @@ mv lld ld64.lld
 COPYFILE_DISABLE=1 tar czvf ld64.tar.gz ld64.lld
 COPYFILE_DISABLE=1 tar cJvf ld64.tar.xz ld64.lld
 sha256sum ld64.lld ld64.tar.gz ld64.tar.xz
+git log --oneline -1000000 PREVIOUS_RELEASE_SHA...HEAD -- lld/MachO
 ```
