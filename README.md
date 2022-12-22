@@ -13,7 +13,7 @@ To build the smallest and fastest binary possible, I'm currently
 building this with:
 
 ```
-cmake ../llvm -G Ninja -DLLVM_ENABLE_PROJECTS='lld' -DCMAKE_BUILD_TYPE=Release -DPKG_CONFIG_EXECUTABLE=/bin/true -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DLLVM_ENABLE_LTO=Thin -DLLVM_TARGETS_TO_BUILD='X86;AArch64' -DCMAKE_OSX_ARCHITECTURES='x86_64;arm64'
+cmake ../llvm -G Ninja -DLLVM_ENABLE_PROJECTS='lld' -DCMAKE_BUILD_TYPE=Release -DPKG_CONFIG_EXECUTABLE=/bin/true -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DLLVM_ENABLE_LTO=Thin -DLLVM_TARGETS_TO_BUILD='X86;AArch64' -DCMAKE_OSX_ARCHITECTURES='x86_64;arm64' -DLLVM_ENABLE_ZSTD=NO
 ninja lld
 strip -rSx bin/lld
 cd bin
