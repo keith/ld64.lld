@@ -7,6 +7,13 @@ releases](https://github.com/llvm/llvm-project/releases) instead, but
 currently this project is in active development, and tracking a version
 closer to HEAD can be useful.
 
+# Installation
+
+Either grab a binary from [the releases
+page](https://github.com/keith/ld64.lld/releases)
+
+Or install with: `brew install keith/formulae/ld64.lld`
+
 ## Build instructions
 
 To build the smallest and fastest binary possible, I'm currently
