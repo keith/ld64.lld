@@ -63,3 +63,4 @@ jobs:
         gh release create "$TAG" --title "$TAG" --target "$GITHUB_REF_NAME" --notes-file notes.md ld64.tar.gz ld64.tar.xz
       env:
         TAG: ${{ inputs.tag }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
