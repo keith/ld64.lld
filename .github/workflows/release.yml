@@ -1,0 +1,65 @@
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The new version to tag, ex: 1.0.5'
+        required: true
+        type: string
+      new_commit:
+        description: "The commit has to build as the new release"
+        required: true
+        type: string
+      previous_commit:
+        description: "The last release's commit hash"
+        required: true
+        type: string
+
+name: Release
+
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v4
+
+    - name: "List Xcode versions"
+      run: ls /Applications | grep Xcode
+
+    - name: "Select Xcode version"
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app
+
+    - name: "Print Xcode version"
+      run: xcodebuild -version
+
+    - name: "Install build dependencies"
+      run: brew install ninja
+
+    - name: "LLVM: Download"
+      run: wget https://github.com/llvm/llvm-project/archive/${{ inputs.new_commit }}.tar.gz
+
+    - name: "LLVM: Decompress"
+      run: |
+        tar -xzf ${{ inputs.new_commit }}.tar.gz
+        mv llvm-project-${{ inputs.new_commit }} llvm
+
+    - name: "LLVM: Build"
+      run: |
+        mkdir -p llvm/build
+        cd llvm/build
+        cmake ../llvm -G Ninja -DLLVM_ENABLE_PROJECTS='lld' -DCMAKE_BUILD_TYPE=Release -DPKG_CONFIG_EXECUTABLE=/bin/true -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DLLVM_ENABLE_LTO=Thin -DLLVM_TARGETS_TO_BUILD='X86;AArch64' -DCMAKE_OSX_ARCHITECTURES='x86_64;arm64' -DLLVM_ENABLE_ZSTD=NO
+        ninja lld
+        cd bin
+        strip -rSx lld
+        mv lld ld64.lld
+
+        COPYFILE_DISABLE=1 tar czvf ld64.tar.gz ld64.lld
+        COPYFILE_DISABLE=1 tar cJvf ld64.tar.xz ld64.lld
+        sha256sum ld64.lld ld64.tar.gz ld64.tar.xz
+
+    - name: Create release
+      run: |
+        ./.github/generate-notes.sh "${{ inputs.previous_commit }}" "${{ inputs.new_commit }}" | tee notes.md
+        gh release create "$TAG" --title "$TAG" --target "$GITHUB_REF_NAME" --notes-file notes.md ld64.tar.gz ld64.tar.xz
+      env:
+        TAG: ${{ inputs.tag }}
