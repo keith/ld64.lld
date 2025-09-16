@@ -60,7 +60,7 @@ jobs:
     - name: Create release
       run: |
         ./.github/generate-notes.sh "${{ inputs.previous_commit }}" "${{ inputs.new_commit }}" | tee notes.md
-        gh release create "$TAG" --title "$TAG" --target "$GITHUB_REF_NAME" --notes-file notes.md ld64.tar.gz ld64.tar.xz
+        gh release create "$TAG" --title "$TAG" --target "$GITHUB_REF_NAME" --notes-file notes.md llvm/build/bin/ld64.tar.gz llvm/build/bin/ld64.tar.xz
       env:
         TAG: ${{ inputs.tag }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

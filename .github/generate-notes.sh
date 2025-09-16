@@ -19,6 +19,6 @@ NOTE: more things could have changed since it depends on core LLVM libraries as 
 sha256s:
 
 \`\`\`
-$(shasum -a 256 ld64.lld ld64.tar.gz ld64.tar.xz)
+$(shasum -a 256 llvm/build/bin/ld64.lld llvm/build/bin/ld64.tar.gz llvm/build/bin/ld64.tar.xz)
 \`\`\`
 EOF
