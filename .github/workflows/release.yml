@@ -6,7 +6,7 @@ on:
         required: true
         type: string
       new_commit:
-        description: "The commit has to build as the new release"
+        description: "The commit to build as the new release"
         required: true
         type: string
       previous_commit:
